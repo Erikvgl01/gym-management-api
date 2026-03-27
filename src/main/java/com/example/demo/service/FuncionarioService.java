@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 public class FuncionarioService {
 
@@ -25,6 +27,11 @@ public class FuncionarioService {
         return funcionarioRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado."));
     }
+
+    public List<Funcionario> listarFuncionarios() {
+        return funcionarioRepository.findAll();
+    }
+
 
     public void deletarAluno(Long id){
         funcionarioRepository.deleteById(id);
