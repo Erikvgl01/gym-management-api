@@ -33,7 +33,10 @@ public class FuncionarioService {
     }
 
 
-    public void deletarAluno(Long id){
+    public void deletarFuncionario(Long id){
+        if(!funcionarioRepository.existsById(id)){
+            throw new RuntimeException("Aluno não encontrado");
+        }
         funcionarioRepository.deleteById(id);
     }
 

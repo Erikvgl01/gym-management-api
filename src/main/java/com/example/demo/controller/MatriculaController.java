@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.model.Matricula;
 import com.example.demo.service.MatriculaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,15 +18,26 @@ public class MatriculaController {
     private MatriculaService matriculaService;
 
     @PostMapping
-    public Matricula criarMatricula(@RequestBody Matricula matricula) {return matriculaService.criarMatricula(matricula);}
+    public ResponseEntity<Matricula> criarMatricula(@RequestBody Matricula matricula) {
+        Matricula novaMatricula = matriculaService.criarMatricula(matricula);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novaMatricula);
+    }
 
     @GetMapping
-    public List<Matricula> listarMatriculas() { return matriculaService.listarMatriculas();}
+    public ResponseEntity<List<Matricula>> listarMatriculas() {
+        return ResponseEntity.ok(matriculaService.listarMatriculas());
+    }
 
     @GetMapping ("/{id}")
-    public Matricula buscarMatricula(@PathVariable Long id) { return matriculaService.buscarMatricula(id);}
+    public ResponseEntity<Matricula> buscarMatricula(@PathVariable Long id) {
+        Matricula matricula = matriculaService.buscarMatricula(id);
+        return ResponseEntity.ok(matricula);
+    }
 
     @DeleteMapping ("/{id}")
-    public void deletarMatricula(Long id) { matriculaService.deletarMatricula(id);}
+    public ResponseEntity<Void> deletarMatricula(@PathVariable Long id) {
+        matriculaService.deletarMatricula(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }
