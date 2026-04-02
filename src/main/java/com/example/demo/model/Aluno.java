@@ -22,6 +22,9 @@ public class Aluno {
     @Column(nullable = false, unique = true)
     private String telefone;
 
+    @Column (nullable = false, length = 11)
+    private String cpf;
+
     @Column(nullable = false)
     private BigDecimal mensalidade;
 

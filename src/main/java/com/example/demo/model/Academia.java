@@ -18,6 +18,9 @@ public class Academia {
     @Column (nullable = false, length = 100)
     private String nome;
 
+    @Column (nullable = false, length = 14)
+    private String cnpj;
+
     @Column (nullable = false)
     private String endereco;
 

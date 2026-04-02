@@ -19,6 +19,12 @@ public class Funcionario {
         @Column (nullable = false, length = 100)
         private String nome;
 
+        @Column (nullable = false, length = 11)
+        private String cpf;
+
+        @Column (nullable = false)
+        private String cargo;
+
         @Column (nullable = false, unique = true)
         private String telefone;
 
