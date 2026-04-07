@@ -8,6 +8,7 @@ public record AlunoUpdateDto(
         String nome,
         String telefone,
         BigDecimal mensalidade,
-        Plano plano
+        Plano plano,
+        String cpf
 ) {
 }

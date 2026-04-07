@@ -1,5 +1,5 @@
 package com.example.demo.dto;
-
+import com.example.demo.model.Academia;
 public record AcademiaResponseDto(
         Long id,
         String nome,
@@ -7,7 +7,7 @@ public record AcademiaResponseDto(
         String telefone,
         String cnpj
 ) {
-    public AcademiaResponseDto(String nome, String endereco, String telefone, String cnpj) {
-        this(null, nome, endereco, telefone, cnpj);
+    public AcademiaResponseDto(Academia academia) {
+        this(academia.getId(), academia.getNome(), academia.getEndereco(), academia.getTelefone(), academia.getCnpj());
     }
 }

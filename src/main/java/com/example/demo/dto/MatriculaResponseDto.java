@@ -3,7 +3,6 @@ package com.example.demo.dto;
 import com.example.demo.model.Matricula;
 import com.example.demo.model.Plano;
 import java.time.LocalDate;
-
 public record MatriculaResponseDto(
         Long id,
         Long alunoId,
