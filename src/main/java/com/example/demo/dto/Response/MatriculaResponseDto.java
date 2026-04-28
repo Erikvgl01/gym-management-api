@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.Response;
 
 import com.example.demo.model.Matricula;
 import com.example.demo.model.Plano;

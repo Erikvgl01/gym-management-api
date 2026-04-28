@@ -1,9 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Aluno;
+import com.example.demo.model.FormaPagamento;
 import com.example.demo.model.Matricula;
+import com.example.demo.model.Pagamento;
+import com.example.demo.model.PagamentoStatus;
 import com.example.demo.repository.AlunoRepository;
 import com.example.demo.repository.MatriculaRepository;
+import com.example.demo.repository.PagamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,14 @@ import java.util.List;
 public class MatriculaService {
     @Autowired
     private AlunoRepository alunoRepository;
+
+    private final PagamentoRepository pagamentoRepository;
+    private final MatriculaRepository matriculaRepository;
+
+    public MatriculaService(MatriculaRepository matriculaRepository, PagamentoRepository pagamentoRepository) {
+        this.matriculaRepository = matriculaRepository;
+        this.pagamentoRepository = pagamentoRepository;
+    }
 
     public Matricula criarMatricula(Matricula matricula) {
 
@@ -29,14 +41,18 @@ public class MatriculaService {
 
         validarMatricula(matricula);
 
-        return matriculaRepository.save(matricula);
-    }
+        Matricula matriculaSalva = matriculaRepository.save(matricula);
 
+        Pagamento pagamento = new Pagamento();
+        pagamento.setAluno(aluno);
+        pagamento.setMatricula(matriculaSalva);
+        pagamento.setValor(aluno.getMensalidade());
+        pagamento.setVencimento(matriculaSalva.getDataInicio());
+        pagamento.setStatus(PagamentoStatus.PENDENTE);
+        pagamento.setForma(FormaPagamento.PIX);
+        pagamentoRepository.save(pagamento);
 
-    private final MatriculaRepository matriculaRepository;
-
-    public MatriculaService(MatriculaRepository matriculaRepository) {
-        this.matriculaRepository = matriculaRepository;
+        return matriculaSalva;
     }
 
 
@@ -46,10 +62,13 @@ public class MatriculaService {
 
     public Matricula buscarMatricula(Long id) {
         return matriculaRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Matrícula não encontrada."));
     }
 
     public void deletarMatricula(Long id) {
+        if (!matriculaRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Matrícula não encontrada.");
+        }
         matriculaRepository.deleteById(id);
     }
 

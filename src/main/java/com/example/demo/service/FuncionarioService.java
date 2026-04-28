@@ -25,7 +25,7 @@ public class FuncionarioService {
 
     public Funcionario buscarFuncionario(Long id) {
         return funcionarioRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Funcionário não encontrado."));
     }
 
     public List<Funcionario> listarFuncionarios() {
@@ -35,7 +35,7 @@ public class FuncionarioService {
 
     public void deletarFuncionario(Long id){
         if(!funcionarioRepository.existsById(id)){
-            throw new RuntimeException("Aluno não encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Funcionário não encontrado.");
         }
         funcionarioRepository.deleteById(id);
     }

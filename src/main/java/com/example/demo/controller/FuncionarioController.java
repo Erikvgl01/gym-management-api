@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.Request.FuncionarioRequestDto;
+import com.example.demo.dto.Response.FuncionarioResponseDto;
 import com.example.demo.model.Funcionario;
 import com.example.demo.service.FuncionarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,18 +19,30 @@ public class FuncionarioController {
     private FuncionarioService funcionarioService;
 
     @PostMapping
-    public ResponseEntity<Funcionario> criarFuncionario(@RequestBody Funcionario funcionario) {
+    public ResponseEntity<FuncionarioResponseDto> criarFuncionario(@RequestBody @Valid FuncionarioRequestDto funcionarioRequestDto) {
+        Funcionario funcionario = new Funcionario();
+        funcionario.setNome(funcionarioRequestDto.nome());
+        funcionario.setCargo(funcionarioRequestDto.cargo());
+        funcionario.setTelefone(funcionarioRequestDto.telefone());
+        funcionario.setCpf(funcionarioRequestDto.cpf());
+        funcionario.setSalario(funcionarioRequestDto.salario());
+
         Funcionario novoFuncionario = funcionarioService.criarFuncionario(funcionario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoFuncionario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new FuncionarioResponseDto(novoFuncionario));
         }
 
     @GetMapping
-    public ResponseEntity<List<Funcionario>> listarFuncionarios() {return ResponseEntity.ok(funcionarioService.listarFuncionarios());}
+    public ResponseEntity<List<FuncionarioResponseDto>> listarFuncionarios() {
+        List<FuncionarioResponseDto> resposta = funcionarioService.listarFuncionarios().stream()
+                .map(FuncionarioResponseDto::new)
+                .toList();
+        return ResponseEntity.ok(resposta);
+    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Funcionario> buscarFuncionario(@PathVariable Long id) {
+    public ResponseEntity<FuncionarioResponseDto> buscarFuncionario(@PathVariable Long id) {
         Funcionario funcionario = funcionarioService.buscarFuncionario(id);
-        return ResponseEntity.ok(funcionario);
+        return ResponseEntity.ok(new FuncionarioResponseDto(funcionario));
         }
 
     @DeleteMapping("/{id}")
