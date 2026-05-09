@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Academia;
-import com.example.demo.model.Aluno;
 import com.example.demo.repository.AcademiaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class AcademiaService {
 
     public Academia buscarAcademia(Long id) {
         return academiaRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno não encontrado."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Academia não encontrada."));
     }
 
     public List<Academia> listarAcademias() {
@@ -33,6 +32,9 @@ public class AcademiaService {
     }
 
     public void deletarAcademia(Long id){
+        if (!academiaRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Academia não encontrada.");
+        }
         academiaRepository.deleteById(id);
     }
 
