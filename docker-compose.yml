@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:15-alpine # Versão leve e estável
+    container_name: gym-api-db
+    restart: always            # Resolve o problema de ter que dar 'start' manual
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gym_management
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
